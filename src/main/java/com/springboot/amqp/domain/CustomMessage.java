@@ -1,4 +1,4 @@
-package com.springboot.amqp.config;
+package com.springboot.amqp.domain;
 
 import java.io.Serializable;
 
@@ -24,11 +24,11 @@ public class CustomMessage implements Serializable {
 	private static final long serialVersionUID = 4505478899787416295L;
 
 	private String text;
-	private Long priority;
-	private String secret;
+	private Integer priority;
+	private boolean secret;
 
-	public CustomMessage(@JsonProperty("test") String text, @JsonProperty("priority") Long priority,
-			@JsonProperty("secret") String secret) {
+	public CustomMessage(@JsonProperty("test") String text, @JsonProperty("priority") Integer priority,
+			@JsonProperty("secret") boolean secret) {
 		super();
 		this.text = text;
 		this.priority = priority;
