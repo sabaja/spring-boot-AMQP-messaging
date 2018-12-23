@@ -3,8 +3,10 @@ package com.springboot.amqp.event;
 import java.util.Random;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import com.springboot.amqp.MessagingApplication;
 import com.springboot.amqp.domain.CustomMessage;
@@ -17,21 +19,32 @@ import lombok.extern.slf4j.Slf4j;
  * @author sabaja
  *
  */
+@Service
 @Slf4j
-public class CustomSenderMessage {
+public class CustomMessageSender {
 
+	
 	private final RabbitTemplate rabbitTemplate;
+	@Value("${custom.message}")
+	private String customMessage;
 
-	public CustomSenderMessage(RabbitTemplate rabbitTemplate) {
-		super();
+	public String getCustomMessage() {
+		return customMessage;
+	}
+
+	public void setCustomMessage(String customMessage) {
+		this.customMessage = customMessage;
+	}
+
+	@Autowired
+	public CustomMessageSender(RabbitTemplate rabbitTemplate) {
 		this.rabbitTemplate = rabbitTemplate;
 	}
 
-//	TODO
 	@Scheduled(fixedDelay = 3000L)
-	public void sendMessage(@Value("{custom.message}") String customMessage) {
+	public void sendMessage() {
 		var message = new CustomMessage(customMessage, new Random().nextInt(150), false);
-		log.info("sending message...details[{}]", message);
+		log.info("sending message...details[text:{}, priority:{}, secret:{}]", message.getText(), message.getPriority(), message.isSecret());
 		this.rabbitTemplate.convertAndSend(MessagingApplication.EXCHANGE_NAME, MessagingApplication.ROUTING_KEY,
 				message);
 		log.info("message sent");
