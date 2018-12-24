@@ -23,10 +23,33 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomMessageSender {
 
-	
 	private final RabbitTemplate rabbitTemplate;
 	@Value("${custom.message}")
 	private String customMessage;
+	@Value("${exchange.name}")
+	private String exchangeName;
+	@Value("${routing.key}")
+	private String routingkey;
+
+	public String getExchangeName() {
+		return exchangeName;
+	}
+
+	public void setExchangeName(String exchangeName) {
+		this.exchangeName = exchangeName;
+	}
+
+	public String getRoutingkey() {
+		return routingkey;
+	}
+
+	public void setRoutingkey(String routingkey) {
+		this.routingkey = routingkey;
+	}
+
+	public RabbitTemplate getRabbitTemplate() {
+		return rabbitTemplate;
+	}
 
 	public String getCustomMessage() {
 		return customMessage;
@@ -45,7 +68,7 @@ public class CustomMessageSender {
 	public void sendMessage() {
 		var message = new CustomMessage(customMessage, new Random().nextInt(150), false);
 		log.info("sending message...details[text:{}, priority:{}, secret:{}]", message.getText(), message.getPriority(), message.isSecret());
-		this.rabbitTemplate.convertAndSend(MessagingApplication.EXCHANGE_NAME, MessagingApplication.ROUTING_KEY,
+		this.rabbitTemplate.convertAndSend(this.getExchangeName(), this.getRoutingkey(),
 				message);
 		log.info("message sent");
 	}

@@ -4,35 +4,33 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import com.springboot.amqp.MessagingApplication;
 
 @Configuration
 public class AmqpRabbitConfiguration {
 
 	@Bean
 	public TopicExchange topicExchange() {
-	return new TopicExchange(MessagingApplication.EXCHANGE_NAME);
+	return new TopicExchange("${exchange.name}") ;
 	}
 	
 	@Bean
 	public Queue genericQueue() {
-		return new Queue(MessagingApplication.QUEUE_GENERIC_NAME);
+		return new Queue("${queue.generic.name}");
 	}
 	
 	@Bean
 	public Queue customQueue() {
-		return new Queue(MessagingApplication.QUEUE_SPECIFIC_NAME);
+		return new Queue("${queue.specific.name}");
 	}
 
 	@Bean
 	public String routingKey() {
-		return MessagingApplication.ROUTING_KEY;
+		return "${routing.key}";
 	}
 	
 	@Bean
