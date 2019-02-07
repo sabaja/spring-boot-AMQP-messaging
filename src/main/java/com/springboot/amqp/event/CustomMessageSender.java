@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.springboot.amqp.MessagingApplication;
 import com.springboot.amqp.domain.CustomMessage;
 
 import lombok.extern.slf4j.Slf4j;
